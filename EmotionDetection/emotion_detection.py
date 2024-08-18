@@ -17,10 +17,14 @@ def emotion_detector(text_to_analyse):
     # Parse the response from the API
     formatted_response = json.loads(response.text)
 
-    res = None;
     # If the response status code is 200, extract the label and score from the response
     if response.status_code == 200:
-        res = formatted_response['emotionPredictions'][0]
+        emotions = formatted_response['emotionPredictions'][0]['emotion']
+        max_key = max(emotions, key=emotions.get)
+        emotions["dominant_emotion"] = max_key
+
+        return emotions  
+
         # score = formatted_response['documentSentiment']['score']
     # If the response status code is 500, set label and score to None
     # elif response.status_code == 500:
@@ -29,4 +33,4 @@ def emotion_detector(text_to_analyse):
 
     # Return the label and score in a dictionary
     #return {'label': label, 'score': score}
-    return res    
+      
